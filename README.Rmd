@@ -73,4 +73,136 @@ paste("The standar deviation or the volatility of Spending Score is:",sd(data$Sp
 
 ```
 
+The set of these data can tell us the distribution of each variable, knowing the quartiles, the mean and the standard deviation.
 
+***
+## Data visualitation.
+
+We are going to draw some graphs that will help us to better understand the data, we will make some graphs such as histograms, boxplots, bar charts among others, this will be a complement to the exploration of the data.
+
+#### Data visualitation per Age
+
+```{r echo=FALSE}
+
+library(plotrix)
+porcent <- (table(data$Gender)/sum(table(data$Gender)) * 100)
+pie3D(table(data$Gender), labels = paste(row.names(porcent), porcent, "%"),
+      main = "Percent of woman and man")
+```
+
+
+#### Data visualitation per Age
+
+```{r echo=FALSE}
+
+hist(data$Age, col = "royalblue", xlab = "Age", main = "Distribution of Age ")
+
+
+```
+
+
+#### Data visualitation per Annual Income
+
+```{r echo=FALSE}
+plot(density(data$Annual.Income..k..),main = "Density of Annual Income", xlab = "Income") 
+polygon(density(data$Annual.Income..k..),col = "#39a9cb")
+
+
+```
+
+
+
+#### Data visualitation per Annual Income
+
+```{r echo=FALSE}
+
+
+boxplot(data$Spending.Score..1.100., 
+        main = "Boxplot Sependig Score", col = "#ffeda3", horizontal = TRUE)
+
+```
+
+***
+
+## K-means algorithm
+
+Since we want to segment a very diverse group of customers based on their main characteristics (dataset variables) it may be appropriate to use the k-means algorithm to do the clustering. To find out the optimal number of custers, the Elbow Method and the Silhouette Method will be used.
+
+
+First, let's look at the dataset in a graph SpendingScore vs IncomeAnnual, because We want to know how many spend the customers to offer our  best product according their needs.
+
+```{r echo=FALSE}
+library(purrr)
+set.seed(2021)
+data_clustering <- cbind.data.frame(data$Annual.Income..k..
+                                    , data$Spending.Score..1.100.)
+names(data_clustering)[1] <- "IncomeAnnual"
+names(data_clustering)[2] <- "SpendingScore"
+
+plot(x = data_clustering$IncomeAnnual, y = data_clustering$SpendingScore, ylab = "Spending Score"
+   , xlab = "Income Annual", main = "Customer clustering per Income and Spend")
+
+
+```
+
+
+Once knowing how the graph looks like, We can apply the k-means method, but in this case, We going to do a loop running 10 times for 10 different k values of the clustering, obtaining 10 different values for total within-cluster sum of squares, with that values save in array, We can now make a plot, finding the the minimum of total within-cluster sum of squares  finding in turn best cluster.
+
+* Elbow Method 
+
+```{r echo=FALSE}
+
+kmeans_tot_withinss <- c()
+
+for (k in c(1:10)) {
+  k_means <- kmeans(data_clustering,k,iter.max = 100, 
+                    nstart = 100, algorithm = "Lloyd" )
+  kmeans_tot_withinss[k] <- k_means$tot.withinss
+  
+}
+
+kmeans_tot_withinss
+plot(c(1:10), kmeans_tot_withinss, type = "o", main = "ELbow Method", xlab = "Cluster"
+     , ylab = "Total within-cluster sum of squares")
+
+```
+
+
+* Silhouette Method
+
+Silhouette analysis can be used to study the separation distance between the resulting clusters. The silhouette plot displays a measure of how close each point in one cluster is to points in the neighboring clusters and thus provides a way to assess parameters like number of clusters visually. This measure has a range of [-1, 1].
+
+In the same way, we will run 9 times in a loop to know the silhouette value of each K clusters. So we will make a graph of average silhouette method vs Cluster, as follows:
+
+```{r include=FALSE}
+
+library(cluster)
+library(factoextra)
+average_sil <- c()
+for (i in c(2:10)) {
+  k<-kmeans(data_clustering, i,iter.max=100,nstart=50,algorithm="Lloyd")
+  #silh_plot<-plot(silhouette(k$cluster,dist(data_clustering,"euclidean")))
+  s <- silhouette(k$cluster,dist(data_clustering,"euclidean"))
+  average_sil[i-1] <- mean(s[,3])
+}
+
+
+```
+
+
+
+```{r echo=FALSE}
+
+
+plot(c(2:10), average_sil, type = "o", main = "Silhouette Method", xlab = "Cluster",
+     ylab = "Avg of Sil Method")
+```
+
+
+By observing where the concavity in the Elbow Method is at the same time as the maximum average of the Silhouette method, we decide that the optimal number of clusters is 5. Finally, let's identify each cluster with a colour, giving us the following result:
+
+```{r echo=FALSE}
+final <- kmeans(data_clustering,5,iter.max=100,nstart=50,algorithm="Lloyd")
+fviz_cluster(final, data = data_clustering)
+
+```
