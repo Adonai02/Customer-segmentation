@@ -11,6 +11,34 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r include=FALSE}
+library(DBI)
+connect_own<-function() {
+  
+  options(mysql = list(
+    "host" = "localhost", 
+    "port" = 3306,
+    "user" = "abel",
+    "password" = "T77vqlra$"
+    
+  ))
+  
+  
+  db <- RMySQL::dbConnect(RMySQL::MySQL(), dbname = "PROYECTO_3",
+                          host = options()$mysql$host, 
+                          port = options()$mysql$port, user = options()$mysql$user, 
+                          password = options()$mysql$password)  
+  
+  
+  
+  return(db)
+}
+
+con_own <- connect_own()
+table <- dbReadTable(con_own, "Tabla_Proyecto_3")
+data <- data.frame(table)
+```
+
 # Customer-segmentation
 
 <!-- badges: start -->
@@ -18,18 +46,31 @@ knitr::opts_chunk$set(
 
 The goal of Customer-segmentation is to ...
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+***
+## Importation and exploration of data
 
-```{r cars}
-summary(cars)
+Let's look at the dataset to see if it has been loaded correctly and to see the name and type of the variables.
+
+
+```{r echo=FALSE}
+head(data)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
 
-You can also embed plots, for example:
+We look at the summary of the data and the standard deviation of numeric variables.
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r echo = FALSE}
+summary(data)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub.
+
+
+```{r echo=FALSE}
+
+paste("The standar deviation or the volatility of Age is: ",sd(data$Age))
+paste("The standar deviation or the volatility of Annual Income is: ",sd(data$Annual.Income..k..))
+paste("The standar deviation or the volatility of Spending Score is:",sd(data$Spending.Score..1.100.))
+
+```
+
+

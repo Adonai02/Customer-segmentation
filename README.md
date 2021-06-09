@@ -8,29 +8,39 @@
 
 The goal of Customer-segmentation is to …
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+------------------------------------------------------------------------
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+## Importation and exploration of data
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/master/examples>.
+Let’s look at the dataset to see if it has been loaded correctly and to
+see the name and type of the variables.
 
-You can also embed plots, for example:
+    #>   CustomerID Gender Age Annual.Income..k.. Spending.Score..1.100.
+    #> 1          1   Male  19                 15                     39
+    #> 2          2   Male  21                 15                     81
+    #> 3          3 Female  20                 16                      6
+    #> 4          4 Female  23                 16                     77
+    #> 5          5 Female  31                 17                     40
+    #> 6          6 Female  22                 17                     76
 
-![](README_files/figure-gfm/pressure-1.png)<!-- -->
+We look at the summary of the data and the standard deviation of numeric
+variables.
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub.
+    #>    CustomerID        Gender               Age        Annual.Income..k..
+    #>  Min.   :  1.00   Length:200         Min.   :18.00   Min.   : 15.00    
+    #>  1st Qu.: 50.75   Class :character   1st Qu.:28.75   1st Qu.: 41.50    
+    #>  Median :100.50   Mode  :character   Median :36.00   Median : 61.50    
+    #>  Mean   :100.50                      Mean   :38.85   Mean   : 60.56    
+    #>  3rd Qu.:150.25                      3rd Qu.:49.00   3rd Qu.: 78.00    
+    #>  Max.   :200.00                      Max.   :70.00   Max.   :137.00    
+    #>  Spending.Score..1.100.
+    #>  Min.   : 1.00         
+    #>  1st Qu.:34.75         
+    #>  Median :50.00         
+    #>  Mean   :50.20         
+    #>  3rd Qu.:73.00         
+    #>  Max.   :99.00
+
+    #> [1] "The standar deviation or the volatility of Age is:  13.9690073315589"
+    #> [1] "The standar deviation or the volatility of Annual Income is:  26.2647211652712"
+    #> [1] "The standar deviation or the volatility of Spending Score is: 25.8235216683702"
