@@ -207,3 +207,6 @@ final <- kmeans(data_clustering,5,iter.max=100,nstart=50,algorithm="Lloyd")
 fviz_cluster(final, data = data_clustering)
 
 ```
+
+
+

@@ -126,4 +126,5 @@ as the maximum average of the Silhouette method, we decide that the
 optimal number of clusters is 5. Finally, let’s identify each cluster
 with a colour, giving us the following result:
 
+
 ![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->

@@ -97,3 +97,5 @@ plot(c(2:9), average_sil, type = "o", main = "Silhouette Method", xlab = "Cluste
 final <- kmeans(data_clustering,5,iter.max=100,nstart=50,algorithm="Lloyd")
 fviz_cluster(final, data = data_clustering)
 
+
+
