@@ -6,7 +6,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of Customer-segmentation is to …
+The goal of Customer Segmentation is to chose the best categorization in
+a graph Spend vs Income with the objective of know what kind of customer
+offer the right product, always searching a buy.
 
 ------------------------------------------------------------------------
 
